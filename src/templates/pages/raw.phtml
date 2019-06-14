@@ -1,0 +1,12 @@
+<?php
+
+namespace Request;
+
+$name = Page::read( 'name' );
+if ( $name ) {
+	header( 'Content-Disposition: attachment; filename=' . urlencode( $name ) );
+}
+
+header( 'Content-Type: ' . Page::read( 'type' ) );
+
+echo Page::read( 'data' );

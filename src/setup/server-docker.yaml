@@ -1,0 +1,26 @@
+admin:
+  name: Development (Docker)
+  mail: info@cepharum.de
+  password: secret
+
+database:
+  dsn: mysql:host=database;port=3306;dbname=dev;charset=utf8
+  username: dev
+  password: devDEV.8
+  prefix: rp_
+  # options:
+  #   init: SET NAMES utf8
+
+smtp:
+  hostname: sendmail
+  port: 25
+#   # secure: tls
+#   # port: 587
+#   secure: ssl
+#   port: 465
+#   # auth: true
+#   # username: <username>
+#   # password: <password>
+
+parameters:
+  # request: request

@@ -1,0 +1,56 @@
+<?php namespace Request; ?>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Request Processor</title>
+		<?php echo Page::read( 'head' ) ?>
+		<link rel="icon" type="image/svg" href="assets/favicon.svg">
+		<link href="assets/styles.dist.css" rel="stylesheet">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+	</head>
+	<body id="top">
+		<div id="wrapper">
+			<div id="header">
+				<div class="logo"><a href="/"><img src="assets/logo.svg" alt="Logo"></a></div>
+				<div class="stripe">
+					<div class="slogan">This site is for demonstration, only!</div>
+				</div>
+			</div>
+			<div id="main">
+				<div class="content">
+
+					<?php echo Page::read( 'main' ) ?>
+
+				</div>
+			</div>
+			<div id="footer">
+				<div class="columns">
+					<div>
+						<p>
+							Your Company<br/>
+							Your Address<br/>
+							ZIP Locality
+						</p>
+					</div>
+					<div>
+						<p>
+							phone: (1) 555 - 12345<br/>
+							mail: <a href="mailto:info@example.com">info@example.com</a>
+						</p>
+					</div>
+					<div>
+						<ul class="menu">
+							<li><a href="http://www.example.com/imprint.html">Imprint</a></li>
+							<li><a href="http://www.example.com/terms.html">Terms & Conditions</a></li>
+							<li><a href="http://www.example.com/privacy.html">Privacy Terms</a></li>
+						</ul>
+						<p>
+							&copy; Your Company
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,11 @@
+.idea
+src/setup/server.yaml
+src/vendor
+src/templates/pages/default.phtml
+src/config/*.yaml
+!src/config/defaults.dist.yaml
+!src/config/example.yaml
+src/assets/*.scss
+!src/assets/*.dist.scss
+src/assets/*.css
+!src/assets/*.dist.css

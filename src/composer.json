@@ -1,0 +1,22 @@
+{
+    "name": "cepharum/request-processor",
+    "description": "basic server backend for forms-processor",
+    "type": "project",
+    "require": {
+        "mustangostang/spyc": "^0.6.2",
+        "erusev/parsedown": "^1.7",
+        "phpmailer/phpmailer": "^6.0",
+        "ext-pdo": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-intl": "*"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Urban",
+            "email": "thomas.urban@cepharum.de"
+        }
+    ],
+    "target-dir": "src/vendor"
+}

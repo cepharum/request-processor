@@ -1,0 +1,27 @@
+version: "3.5"
+services:
+  database:
+    build:
+      context: docker/mysql
+    volumes:
+      - "dbdata:/var/lib/mysql"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+
+  sendmail:
+    build:
+      context: docker/exim4
+
+  application:
+    depends_on:
+      - database
+      - sendmail
+    build:
+      context: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+
+volumes:
+  dbdata:

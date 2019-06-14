@@ -1,0 +1,40 @@
+<?php
+
+namespace Request;
+
+use Throwable;
+
+
+Config::detectCurrent( '' );
+
+
+$error = Page::read( 'error' );
+
+if ( $error instanceof Throwable ) {
+	try {
+		$debug = Setup::get( 'debug', 'no' );
+	} catch ( Throwable $exception ) {
+		$debug = false;
+	}
+
+	$error = Data::asBoolean( $debug ) ? strval( $error ) : $error->getMessage();
+} else {
+	$error = strval( $error ) ?: L10n::translate( 'unknown error' );
+}
+
+$title   = L10n::interpolate( 'error.title' );
+$message = L10n::interpolate( 'error.message' );
+
+
+Page::write( <<<EOT
+<div id="exception-error" class="regular-content">
+	<div class="result">
+		<h1>$title</h1>
+		<div class="error"><p>$message</p></div>
+		<p class="errormessage">$error</p>
+	</div>
+</div>
+EOT
+);
+
+include( Page::getTemplateFile() );

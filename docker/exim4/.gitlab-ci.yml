@@ -1,0 +1,21 @@
+stages:
+  - build
+  - trigger
+
+build:
+  stage: build
+  only:
+    - master
+    - /^\d+[.]\d+[.]\d+$/
+  script:
+    - docker build -t $DOCKER_HUB_REPO .
+    - docker login --username=$DOCKER_HUB_USERNAME --password=$DOCKER_HUB_PASSWORD
+    - if [ "$CI_BUILD_REF_NAME" != "master" ]; then docker tag $DOCKER_HUB_REPO $DOCKER_HUB_REPO:$CI_BUILD_REF_NAME; fi
+    - docker push $DOCKER_HUB_REPO
+
+trigger:
+  stage: trigger
+  only:
+    - master
+  script:
+    - gitlab_trigger_downstream

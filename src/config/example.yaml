@@ -1,0 +1,380 @@
+title:
+  de: Beispiel
+  en: Example
+teaser:
+  de: |
+    Eine Reihe von Formularen demonstriert am fiktiven Beispiel einer Bestellung,
+    welche Möglichkeiten der Request Processor bietet.
+
+    > Das Beispiel zeigt eine Mischung aus deutschen und englischen Texten. Dies
+    ist kein Fehler, sondern soll in der Definition der Formulare demonstrieren,
+    welche Möglichkeiten bestehen um wahlweise mehrsprachige oder einsprachige
+    (in diesem Fall englische) Texte zu definieren.
+  en: |
+    A sequence of forms is demonstrating opportunities provided by request
+    processor by showing fictional order process.
+
+form:
+  mode:
+    buttons:
+      submit:
+        de: Jetzt verbindlich bestellen
+        en: Order Now
+
+  processors:
+    - type: dump
+      label: "collected information:"
+    - type: map
+      map:
+        validation_mail: =$form.account.mail
+        plan: =plan.plan
+        billing:
+          gender: =billing.person.gender
+          firstname: =billing.person.firstname
+          lastname: =billing.person.lastname
+          company: =billing.company
+          address: "{{billing.address.street}} {{billing.address.number}}"
+          zip: =billing.address2.zip
+          locality: =billing.address2.locality
+        delivery:
+          gender: =delivery.person.gender
+          firstname: =delivery.person.firstname
+          lastname: =delivery.person.lastname
+          company: =delivery.company
+          address: "{{delivery.address.street}} {{delivery.address.number}}"
+          zip: =delivery.address2.zip
+          locality: =delivery.address2.locality
+    - type: send
+      url: $$scripturl$$?$$requestname$$=$$requestid$$&receive=$$formid$$
+
+  sequence:
+    - name: plan
+      label: Select Plan
+      title: Select Desired Plan
+      fields:
+        - type: info
+          markdown: yes
+          text:
+            de: |
+              Wir bieten Ihnen unterschiedliche Tarife passend zu Ihren
+              Anforderungen an. Wählen Sie zunächst den von Ihnen gewünschten
+              Tarif:
+            en: |
+              We provide different plans to meet your individual requirements.
+              Please select the desired plan here:
+        - type: select
+          label:
+            de: Tarif
+            en: Plan
+          prompt:
+            de: Wählen Sie einen Tarif...
+            en: Choose a plan...
+          name: plan
+          required: true
+          options:
+            - value: starter
+              label: Starter - 5 EUR/user/month
+            - value: pro
+              label: Pro - 10 EUR/user/month
+            - value: enterprise
+              label: Enterprise - 20 EUR/user/month
+        - type: info
+          visible: =plan=="starter"
+          markdown: yes
+          classes:
+            - table-with-borders
+          text: |
+            ## Your Plan: Starter
+
+            Basic features, sufficient for small teams.
+
+            | Feature | Limits |
+            |---------|--------|
+            | Storage | 5 GB   |
+            | Aliases | 5      |
+            | Cores   | 1      |
+            | RAM     | 1 GB   |
+            | Support | E-Mail |
+        - type: info
+          visible: =plan=="pro"
+          markdown: yes
+          classes:
+            - table-with-borders
+          text: |
+            ## Your Plan: Pro
+
+            Pro features for pro users.
+
+            | Feature | Limits |
+            |---------|--------|
+            | Storage | 20 GB  |
+            | Aliases | 100    |
+            | Cores   | 4      |
+            | RAM     | 4 GB   |
+            | Support | 9-17h  |
+        - type: info
+          visible: =plan=="enterprise"
+          markdown: yes
+          classes:
+            - table-with-borders
+          text: |
+            ## Your Plan: Enterprise
+
+            All features. Full power.
+
+            | Feature | Limits |
+            |---------|--------|
+            | Storage | 20 GB  |
+            | Aliases | 100    |
+            | Cores   | 16     |
+            | RAM     | 128 GB |
+            | Support | 24/7   |
+
+    - name: billing
+      label: Billing Address
+      fields:
+        - type: group
+          name: person
+          label: Contact Person
+          fields:
+            - name: gender
+              required: true
+              type: select
+              prompt: true
+              options:
+                - value: f
+                  label:
+                    de: Frau
+                    en: Ms.
+                - value: m
+                  label:
+                    de: Herr
+                    en: Mr.
+            - name: firstname
+              placeholder:
+                de: Vorname
+                en: First Name
+              required: true
+              classes: weight-20
+            - name: lastname
+              placeholder:
+                de: Nachname
+                en: Last Name
+              required: true
+              classes: weight-20
+        - name: company
+          label: Company
+          required: no
+        - type: group
+          name: address
+          label: Address
+          fields:
+            - name: street
+              placeholder:
+                de: Straße
+                en: Street
+              required: true
+              classes: weight-20
+            - name: number
+              placeholder: No.
+              required: true
+        - type: group
+          name: address2
+          fields:
+            - name: zip
+              placeholder:
+                de: PLZ
+                en: ZIP
+              required: true
+            - name: locality
+              placeholder:
+                de: Ort
+                en: Locality
+              required: true
+              classes: weight-20
+
+    - name: delivery
+      label: Delivery Address
+      fields:
+        - type: group
+          name: person
+          label: Recipient
+          fields:
+            - name: gender
+              initial: =billing.person.gender
+              required: true
+              type: select
+              prompt: true
+              options:
+                - value: f
+                  label:
+                    de: Frau
+                    en: Ms.
+                - value: m
+                  label:
+                    de: Herr
+                    en: Mr.
+            - name: firstname
+              initial: =billing.person.firstname
+              placeholder:
+                de: Vorname
+                en: First Name
+              required: true
+              classes: weight-20
+            - name: lastname
+              initial: =billing.person.lastname
+              placeholder:
+                de: Nachname
+                en: Last Name
+              required: true
+              classes: weight-20
+        - name: company
+          initial: =billing.company
+          label: Company
+          required: no
+        - type: group
+          name: address
+          label: Address
+          fields:
+            - name: street
+              initial: =billing.address.street
+              placeholder:
+                de: Straße
+                en: Street
+              required: true
+              classes: weight-20
+            - name: number
+              initial: =billing.address.number
+              placeholder: No.
+              required: true
+        - type: group
+          name: address2
+          fields:
+            - name: zip
+              initial: =billing.address2.zip
+              placeholder:
+                de: PLZ
+                en: ZIP
+              required: true
+            - name: locality
+              initial: =billing.address2.locality
+              placeholder:
+                de: Ort
+                en: Locality
+              required: true
+              classes: weight-20
+
+    - name: account
+      label: Account Information
+      fields:
+        - type: info
+          markdown: true
+          text:
+            de: |
+              Für die Verwaltung des gebuchten Tarifs ist ein Nutzerkonto
+              erforderlich. Hier bestimmen Sie die E-Mail-Adresse, welche mit
+              dem zu erstellenden Nutzerkonto verknüpft werden soll.
+
+              Diese E-Mail-Adresse wird im Anschluss der Bestellung validiert.
+              Bitte beachten Sie daher eingehende Mails und befolgen Sie
+              Anweisungen darin, um Ihr Nutzerkonto zu validieren und zu
+              aktivieren.
+            en: |
+              For managing the selected plan a user account is required. On this
+              page you provide the mail address to be associated with the user
+              account to be created.
+
+              This mail address will be validated after purchase. Please check
+              your inbox for incoming mails and follow instructions given there
+              to validate and activate your user account.
+        - name: mail
+          label: Mail Address
+          required: true
+          format: mail
+
+    - name: confirm
+      label: Summary
+      fields:
+        - type: info
+          markdown: html
+          classes: side-by-side
+          text:
+            de: |
+              Bitte überprüfen Sie Ihre Angaben, bestätigen Sie die
+              Geschäftsbedingungen und klicken Sie zum Abschluss auf
+              "Jetzt verbindlich bestellen".
+
+              > ### Gewählter Tarif
+              >
+              > {{test(plan.plan=="standard","Standard",test(plan.plan=="pro","Pro","Enterprise"))}}
+
+              > ### Nutzerkonto
+              >
+              > zu validieren über {{account.mail}}
+
+              > ### Rechnungsadresse
+              >
+              > {{lookup("billing.person.gender")}} {{billing.person.firstname}} {{billing.person.lastname}}<br/>
+              > {{billing.company}}<br/>
+              > {{billing.address.street}} {{billing.address.number}}<br/>
+              > {{billing.address2.zip}} {{billing.address2.locality}}
+
+              > ### Lieferadresse
+              >
+              > {{lookup("delivery.person.gender")}} {{delivery.person.firstname}} {{delivery.person.lastname}}<br/>
+              > {{delivery.company}}<br/>
+              > {{delivery.address.street}} {{delivery.address.number}}<br/>
+              > {{delivery.address2.zip}} {{delivery.address2.locality}}
+            en: |
+              Please check all previously provided information, confirm our
+              terms and click on "Order Now" to finally place your order.
+
+              > ### Selected Plan
+              >
+              > * {{test(plan.plan=="starter","Starter",test(plan.plan=="pro","Pro","Enterprise"))}}
+
+              > ### User Account
+              >
+              > to be validated via {{account.mail}}
+
+              > ### Billing Address
+              >
+              > {{lookup("billing.person.gender")}} {{billing.person.firstname}} {{billing.person.lastname}}<br/>
+              > {{billing.company}}<br/>
+              > {{billing.address.street}} {{billing.address.number}}<br/>
+              > {{billing.address2.zip}} {{billing.address2.locality}}
+
+              > ### Delivery Address
+              >
+              > {{lookup("delivery.person.gender")}} {{delivery.person.firstname}} {{delivery.person.lastname}}<br/>
+              > {{delivery.company}}<br/>
+              > {{delivery.address.street}} {{delivery.address.number}}<br/>
+              > {{delivery.address2.zip}} {{delivery.address2.locality}}
+        - type: checkbox
+          name: terms
+          required: true
+          markdown: true
+          options:
+            - value: accepted
+              label:
+                de: |
+                  Ich akzeptiere die [Allgemeinen Geschäftsbedingungen](https://www.example.com/agb.pdf)
+                  als Grundlage für meine Bestellung.
+                en: |
+                  I accept [Terms and Conditions](https://www.example.com/terms.pdf) as a foundation
+                  of my order.
+        - type: checkbox
+          name: fake-only
+          required: true
+          markdown: true
+          options:
+            - value: accepted
+              label:
+                de: |
+                  Ich habe verstanden, dass durch Anklicken der Schaltfläche
+                  "Jetzt verbindlich bestellen" keine echte Bestellung ausgelöst
+                  wird, weil diese gesante Formularstrecke nur Demonstrationszwecken dient.
+                en: |
+                  I confirm to realize, that there will be no actual purchase
+                  by clicking on "Order Now" button below for this sequence of
+                  forms has been provided for the sole purpose of demonstration.

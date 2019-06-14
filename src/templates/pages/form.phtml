@@ -1,0 +1,29 @@
+<?php
+
+namespace Request;
+
+// choose versions to fetch from CDN
+$vueVersion = Setup::get( 'versions.vue', '2.6.10' );
+$fpVersion  = Setup::get( 'versions.forms-processor', '0.5.9' );
+
+
+Page::write( <<<EOT
+	<link href="https://cdn.jsdelivr.net/npm/forms-processor-browser@{$fpVersion}/FormsProcessor.umd.min.form.js" rel="preload" as="script" crossorigin="anonymous"/>
+	<script src="https://cdn.jsdelivr.net/npm/vue@{$vueVersion}/dist/vue.min.js" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/forms-processor-browser@{$fpVersion}/FormsProcessor.umd.min.js" crossorigin="anonymous"></script>
+EOT
+	, null, 'head' );
+
+
+$definition = json_encode( Config::current( 'form' ) );
+
+Page::write( <<<EOT
+	<div id="hook"></div>
+	<script type="text/javascript">
+		FormsProcessor.create( "#hook", { definition: $definition } );
+	</script>
+EOT
+	);
+
+
+include( Page::getTemplateFile() );

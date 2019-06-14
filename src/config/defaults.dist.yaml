@@ -1,0 +1,133 @@
+#
+# The form section contains configuration provided to forms processor. Its
+# content is described as part of forms-processor.
+#
+form:
+  mode:
+    view:
+      progress: on
+    navigation: dumb
+    localStore:
+      id: "fp-input-$$requestid$$"
+      maxAge: 7d
+    onSuccess:
+      de: |
+        Ihre Anfrage wurde erfolgreich entgegengenommen. Sie muss von Ihnen über
+        die angegebene E-Mail-Adresse bestätigt werden.
+
+        **Bitte überprüfen Sie Ihr E-Mail-Postfach.**
+      en: |
+        Your request has been received and stored. A mail has been sent to the
+        provided mail address for confirming your request.
+
+        **Please check your mailbox!**
+    onFailure:
+      de: |
+        Beim Speichern Ihrer Anfrage ist ein Fehler aufgetreten. Bitte versuchen
+        Sie ein weiteres Mal, das Formular abzusenden!
+
+        Sollte das Problem weiterhin bestehen, kontaktieren Sie uns bitte unter
+        [$$admin.mail$$](mailto:$$admin.mail$$). Wir bitten, mögliche
+        Unannehmlichkeiten zu entschuldigen.
+      en: |
+        An error occurred on trying to gather and save your input. Please try to
+        submit your input once again!
+
+        If the error persists we ask you to get in touch with us by sending a
+        mail to [$$admin.mail$$](mailto:$$admin.mail$$). We apologize for any
+        inconvenience.
+  processors:
+    - url: $$scripturl$$?$$requestname$$=$$requestid$$&receive=$$formid$$
+
+#
+# The following section customizes mail send for validation of an incoming
+# request and views displayed when user is clicking on a link provided in those
+# mails.
+#
+validation:
+  # mail template
+  subject:
+    de: Bestätigung Ihrer Anfrage auf {{meta.host}}
+    en: Confirm your request at {{meta.host}}
+  html: no
+  body:
+    de: |
+      Sie haben eine Anfrage auf {{meta.host}} gestellt.
+
+      Diese Anfrage muss von Ihnen noch bestätigt werden. Bitte öffnen Sie dazu
+      den folgenden Link - bspw. durch Anklicken - in einem Browser!
+
+          {{validation-url}}
+
+      Wenn Sie keine Anfrage gestartet haben, dann ignorieren Sie bitte diese
+      Nachricht und klicken Sie auch nicht auf den obigen Link. Wir bitten
+      Sie in diesem Fall, mögliche Unannehmlichkeiten zu entschuldigen. Für
+      weitere Fragen wenden Sie sich bitte per E-Mail an
+
+          {{admin.mail}}
+
+      Vielen Dank!
+    en: |
+      We have received a request at {{meta.host}}.
+
+      The request must be confirmed by you. Please open the following link in a
+      browser e.g. by clicking on it!
+
+          {{validation-url}}
+
+      If you haven't initiated any such request you should ignore this mail and
+      should not click on the link above. In that case we apologize for any
+      inconvenience. Please get in touch with us for additional information by
+      sending a mail to
+
+          {{admin.mail}}
+
+      Thank You!
+
+  # customizing view content displayed when user clicks on validation-url
+  # embedded above
+  title:
+    de: Validierung Ihrer Anfrage
+    en: Request Confirmation
+  onSuccess:
+    de: |
+      Vielen Dank für die Bestätigung Ihrer Daten. Diese wurden nun an uns
+      weitergeleitet.
+
+      Wenn Sie weitere Fragen zum Verlauf der Bearbeitung Ihrer Anfrage haben
+      sollten, dann senden Sie uns bitte eine E-Mail an [{{admin.mail}}](mailto:{{admin.mail}}).
+    en: |
+      Thank you for confirming validity of your request. It has been forwarded to
+      us now.
+
+      If you have any questions regarding state of processing your request you
+      may get in touch with us by sending a mail to [{{admin.mail}}](mailto:{{admin.mail}}).
+  onFailure:
+    de: |
+      Bei der Bestätigung Ihrer Daten ist leider ein Fehler aufgetreten.
+
+      Bitte kontaktieren Sie uns unter [{{admin.mail}}](mailto:{{admin.mail}})! Wir
+      bitten, mögliche Unannehmlichkeiten zu entschuldigen.
+    en: |
+      An error occurred while trying to confirm your request.
+
+      Please get in touch with us by sending a mail to [{{admin.mail}}](mailto:{{admin.mail}}).
+      We apologize for any inconvenience.
+
+#
+# this section is customizing the mail sent to site administrator in case of
+# user having validated its request successfully.
+#
+notification:
+  subject: Incoming Request at {{form-url}}
+  html: yes
+  body: |
+    A new request has been transmitted using your [online form]({{form-url}}).
+    Find attached the user's input once as CSV document and once as YAML
+    document. You may also use the following links for downloading either
+    document:
+
+    * [CSV document]({{csv-url}})
+    * [YAML document]({{yaml-url}})
+
+    Reply to this mail for instantly getting in touch with the requesting user.

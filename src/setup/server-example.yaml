@@ -1,0 +1,48 @@
+#
+# Set the name and the address of the person
+# which will be informed about customer requests
+# after validation
+#
+admin:
+  name: Your Name
+  mail: info@example.com
+  # the following password is required in views for accessing admin views
+  password: secret
+
+#
+# Configure the access to a mysql database #
+#
+database:
+  dsn: mysql:host=database;port=3306;dbname=dev;charset=utf8
+  username: dev
+  password: devDEV.8
+  prefix: auftrag_
+  # options:
+  #   init: SET NAMES utf8
+
+#
+# Configure the access to an external SMTP-server
+# if your webserver can't send mails by its own:
+#
+smtp:
+  hostname: localhost
+  ### Select port
+  port: 25
+  ### Select port 587 for TSL mode ###
+  # secure: tls
+  # port: 587
+  ### Select port 465 for SSL-mode ###
+  # secure: ssl
+  # port: 465
+  ### Activate authentification (auth, username, password) ###
+  # auth: true
+  # username: <username>
+  # password: <password>
+
+#
+# Customize parameter names detected in requests.
+#
+parameters:
+  # Names parameter containing ID selecting kind of request to handle.
+  # Those IDs are affecting what configuration is read from folder /config.
+  request: request
