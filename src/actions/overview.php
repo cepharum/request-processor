@@ -39,6 +39,7 @@ $folder = BASEDIR . '/config';
 
 $items = [];
 
+$redirect = null;
 
 $dir = opendir( $folder );
 while ( ( $entry = readdir( $dir ) ) !== false ) {
@@ -56,7 +57,13 @@ while ( ( $entry = readdir( $dir ) ) !== false ) {
 	$title = $config->query( 'title' );
 	if ( $title ) {
 		$title = L10n::localize( $title );
-		$item = '* [' . $title . '](' . Url::getForForm( $match[1] ) . ')';
+		$url   = Url::getForForm( $match[1] );
+
+		if ( $redirect == null ) {
+			$redirect = $url;
+		}
+
+		$item = '* [' . $title . '](' . $url . ')';
 
 		$teaser = $config->query( 'teaser' );
 		if ( $teaser ) {
@@ -71,6 +78,11 @@ while ( ( $entry = readdir( $dir ) ) !== false ) {
 }
 closedir( $dir );
 
+
+if ( count( $items ) === 1 ) {
+	header( 'Location: ' . $url );
+	exit();
+}
 
 Page::showView( 'success', [
 	'class'   => 'overview',
